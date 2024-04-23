@@ -1,0 +1,68 @@
+"Couple of steps needs to be done-
+
+* Change space to line break(ctrl+j)
+* Delete second column
+*Copy paste column 1 entries to the blank rows
+* Run the first macro
+* Delete blank cells from 2nd column
+*Run the second macro"
+
+
+
+Sub SplitValues()
+    Dim lastRow As Long
+    Dim i As Long, j As Long
+    Dim values() As String
+    
+    lastRow = Cells(Rows.Count, "B").End(xlUp).Row
+    
+    For i = lastRow To 2 Step -1
+        values = Split(Cells(i, "B").Value, Chr(10)) ' Split values based on line break
+        
+        If UBound(values) > 0 Then
+            For j = UBound(values) To 1 Step -1
+                Rows(i + 1).Insert Shift:=xlDown ' Insert a row
+                
+                Cells(i + 1, "A").Value = Cells(i, "A").Value ' Copy A value to the newly inserted row
+                Cells(i + 1, "B").Value = values(j) ' Copy the value from B to the newly inserted row
+                
+                values(j) = "" ' Remove the value from the original cell
+            Next j
+            
+            Cells(i, "B").Value = Join(values, Chr(10)) ' Update the original cell with the modified values
+        End If
+    Next i
+End Sub
+
+Sub MergeCenterCells()
+    Dim lastRow As Long
+    Dim i As Long, mergeStart As Long, mergeEnd As Long
+    Dim currentValue As String, nextValue As String
+    
+    lastRow = Cells(Rows.Count, "A").End(xlUp).Row
+    
+    mergeStart = 2 ' Starting row for merging
+    
+    For i = 2 To lastRow - 1
+        currentValue = Cells(i, "A").Value
+        nextValue = Cells(i + 1, "A").Value
+        
+        If currentValue = nextValue Then
+            mergeEnd = i + 1
+        Else
+            If mergeEnd > mergeStart Then
+                Range(Cells(mergeStart, "A"), Cells(mergeEnd, "A")).Merge ' Merge cells
+                Cells(mergeStart, "A").HorizontalAlignment = xlCenter ' Center align merged cell
+                Cells(mergeStart, "A").VerticalAlignment = xlCenter
+            End If
+            
+            mergeStart = i + 1 ' Update mergeStart for the next group
+        End If
+    Next i
+    
+    If mergeEnd > mergeStart Then
+        Range(Cells(mergeStart, "A"), Cells(mergeEnd, "A")).Merge ' Merge cells
+        Cells(mergeStart, "A").HorizontalAlignment = xlCenter ' Center align merged cell
+        Cells(mergeStart, "A").VerticalAlignment = xlCenter
+    End If
+End Sub

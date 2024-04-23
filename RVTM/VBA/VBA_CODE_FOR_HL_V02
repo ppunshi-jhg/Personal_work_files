@@ -1,0 +1,358 @@
+Sub HazardLogFormattingSetp1()
+    Dim lastRow As Long
+    lastRow = Cells(Rows.Count, "A").End(xlUp).Row
+    
+    Rows(1).Insert
+    Columns("N").Insert
+    ThisWorkbook.Worksheets("QueryResults").Range("N2").Value = "Initial Risk Rating"
+    Columns("W").Insert
+    ThisWorkbook.Worksheets("QueryResults").Range("W2").Value = "Residual Risk Rating"
+    
+    ThisWorkbook.Worksheets("QueryResults").Range("A1").Value = "TLE"
+    Range("A1:B1").Merge
+    ThisWorkbook.Worksheets("QueryResults").Range("C1").Value = "[Linked] Hazard"
+    Range("C1:Z1").Merge
+    ThisWorkbook.Worksheets("QueryResults").Range("Y1").Value = "[Linked] Cause"
+    Range("AA1:AC1").Merge
+    ThisWorkbook.Worksheets("QueryResults").Range("AB1").Value = "[Linked] Control"
+    Range("AD1:AJ1").Merge
+    
+    Range("A1:B2").Interior.Color = RGB(252, 213, 180)
+    Range("C1:Z2").Interior.Color = RGB(183, 222, 232)
+    Range("AA1:AC2").Interior.Color = RGB(204, 192, 218)
+    Range("AD1:AJ2").Interior.Color = RGB(216, 228, 188)
+    
+    With ThisWorkbook.Worksheets("QueryResults").Range("A1:AJ2")
+        .Font.Size = 11
+        .Font.Bold = True
+    End With
+    
+    Columns("A").ColumnWidth = 38
+    Columns("B").ColumnWidth = 62
+    Columns("C").ColumnWidth = 22
+    Columns("D").ColumnWidth = 8
+    Columns("E").ColumnWidth = 59
+    Columns("F").ColumnWidth = 30
+    Columns("G").ColumnWidth = 61
+    Columns("H").ColumnWidth = 24
+    Columns("I").ColumnWidth = 70
+    Columns("J").ColumnWidth = 23
+    Columns("K").ColumnWidth = 23
+    Columns("L").ColumnWidth = 23
+    Columns("M").ColumnWidth = 25
+    Columns("N").ColumnWidth = 43
+    Columns("O").ColumnWidth = 67
+    Columns("P").ColumnWidth = 21
+    Columns("Q").ColumnWidth = 40
+    Columns("R").ColumnWidth = 63
+    Columns("S").ColumnWidth = 23
+    Columns("T").ColumnWidth = 23
+    Columns("U").ColumnWidth = 23
+    Columns("V").ColumnWidth = 20
+    Columns("W").ColumnWidth = 61
+    Columns("X").ColumnWidth = 58
+    Columns("Y").ColumnWidth = 16
+    Columns("Z").ColumnWidth = 15
+    Columns("AA").ColumnWidth = 56
+    Columns("AB").ColumnWidth = 23
+    Columns("AC").ColumnWidth = 20
+    Columns("AD").ColumnWidth = 74
+    Columns("AE").ColumnWidth = 23
+    Columns("AF").ColumnWidth = 23
+    Columns("AG").ColumnWidth = 31
+    Columns("AH").ColumnWidth = 23
+    Columns("AI").ColumnWidth = 23
+    Columns("AJ").ColumnWidth = 23
+    
+End Sub
+
+Sub HazardLogFormattingSetp2()
+    Dim ws As Worksheet
+    Dim rngA As Range
+    Dim rngB As Range
+    Dim rngC As Range
+    Dim rngD As Range
+    Dim rngY As Range
+    Dim rngAB As Range
+    Dim lastRow As Long
+    
+    Set ws = ThisWorkbook.Worksheets("QueryResults")
+    
+    ' Determine the last row in column A
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    
+    ' Set the range from A3 to the last row
+    Set rngA = ws.Range("A3:A" & lastRow)
+    Set rngB = ws.Range("B3:B" & lastRow)
+    Set rngC = ws.Range("C3:C" & lastRow)
+    Set rngD = ws.Range("D3:Z" & lastRow)
+    Set rngY = ws.Range("AA3:AC" & lastRow)
+    Set rngAB = ws.Range("AD3:AJ" & lastRow)
+    
+    ' Clear any existing conditional formatting in the range
+    rngA.FormatConditions.Delete
+    
+    ' Add a new conditional formatting rule
+    With rngA.FormatConditions.Add(Type:=xlExpression, Formula1:="=$A3=$A2")
+        .Font.Color = RGB(255, 255, 255) ' Set the font color to white
+    End With
+    
+    ' Add a new conditional formatting rule
+    With rngA.FormatConditions.Add(Type:=xlExpression, Formula1:="=$A3<>$A2")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
+    End With
+    
+    ' Clear any existing conditional formatting in the range
+    rngB.FormatConditions.Delete
+    
+    ' Add a new conditional formatting rule
+    With rngB.FormatConditions.Add(Type:=xlExpression, Formula1:="=$B3=$B2")
+        .Font.Color = RGB(255, 255, 255) ' Set the font color to white
+    End With
+    
+    ' Add a new conditional formatting rule
+    With rngB.FormatConditions.Add(Type:=xlExpression, Formula1:="=$B3<>$B2")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
+    End With
+    
+    ' Clear any existing conditional formatting in the range
+    rngC.FormatConditions.Delete
+    
+    ' Add a new conditional formatting rule
+    With rngC.FormatConditions.Add(Type:=xlExpression, Formula1:="=$C3=$C2")
+        .Font.Color = RGB(255, 255, 255) ' Set the font color to white
+    End With
+    
+    ' Add a new conditional formatting rule
+    With rngC.FormatConditions.Add(Type:=xlExpression, Formula1:="=$C3<>$C2")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
+    End With
+    
+    ' Clear any existing conditional formatting in the range
+    rngD.FormatConditions.Delete
+    
+    ' Add a new conditional formatting rule
+    With rngD.FormatConditions.Add(Type:=xlExpression, Formula1:="=$D3=$D2")
+        .Font.Color = RGB(255, 255, 255) ' Set the font color to white
+    End With
+    
+    ' Add a new conditional formatting rule
+    With rngD.FormatConditions.Add(Type:=xlExpression, Formula1:="=$D3<>$D2")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
+    End With
+    
+    ' Clear any existing conditional formatting in the range
+    rngY.FormatConditions.Delete
+    
+    ' Add a new conditional formatting rule
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3=$AA2")
+        .Font.Color = RGB(255, 255, 255) ' Set the font color to white
+    End With
+    
+    ' Add a new conditional formatting rule
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3<>$AA2")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
+    End With
+    
+    ' Clear any existing conditional formatting in the range
+    rngAB.FormatConditions.Delete
+    
+    ' Add a new conditional formatting rule
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3=$AA2)")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to black
+    End With
+    
+    ' Add a new conditional formatting rule
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3<>$AA2)")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to black
+    End With
+    ' Add a new conditional formatting rule
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3=$AA2)")
+        .Font.Color = RGB(255, 255, 255) ' Set the font color to white
+    End With
+    
+    ' Add a new conditional formatting rule
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3<>$AA2)")
+        .Font.Color = RGB(0, 0, 0) ' Set the font color to black
+    End With
+    
+    
+End Sub
+
+Sub EfficientCompareFormattingMultipleColumns()
+
+  Dim LastRowAL As Long
+  Dim i As Long, BatchStartRow As Long, BatchEndRow As Long
+
+  With ThisWorkbook.Worksheets("QueryResults") ' Replace with your actual sheet name
+
+    ' Disable screen updating for performance boost
+    Application.ScreenUpdating = False
+
+    ' Find last row with data in AL, excluding headers (if any)
+    LastRowAL = .Cells(.Rows.Count, "AL").End(xlUp).Row
+    If Not IsEmpty(.Cells(1, "AL")) Then ' Check for header in AL
+      LastRowAL = .Range("AL1").Find("*", SearchOrder:=xlByRows, SearchDirection:=xlPrevious).Row - 1
+    End If
+
+    ' Loop through rows in batches (adjust batch size as needed)
+    BatchStartRow = 3
+    For i = 3 To LastRowAL Step 100 ' Adjust batch size based on system resources
+      BatchEndRow = IIf(i + 99 > LastRowAL, LastRowAL, i + 99)
+
+      ' Copy formatting from AJ to AL in a batch
+      .Range("AJ" & BatchStartRow & ":" & "AJ" & BatchEndRow).Copy
+      .Range("AL" & BatchStartRow & ":" & "AL" & BatchEndRow).PasteSpecial Paste:=xlPasteFormats
+      Application.CutCopyMode = False
+
+      BatchStartRow = BatchEndRow + 1
+    Next i
+
+    ' Handle any remaining rows (if batch size doesn't perfectly divide data)
+    If BatchStartRow <= LastRowAL Then
+      .Range("AJ" & BatchStartRow & ":" & "AJ" & LastRowAL).Copy
+      .Range("AL" & BatchStartRow & ":" & "AL" & LastRowAL).PasteSpecial Paste:=xlPasteFormats
+      Application.CutCopyMode = False
+    End If
+
+    ' Re-enable screen updating after the loop
+    Application.ScreenUpdating = True
+
+  End With
+
+End Sub
+
+Sub ConcatenateColumnAMBasedOnAD()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
+    
+    Dim lastRow As Long
+    lastRow = ws.Cells(ws.Rows.Count, "AM").End(xlUp).Row
+    
+    Dim currentGroupValue As String
+    Dim concatenatedValue As String
+    Dim i As Long
+    Dim startRow As Long
+    
+    ' Initialize with the first value
+    currentGroupValue = ws.Cells(3, "AD").Value
+    concatenatedValue = ws.Cells(3, "AM").Value
+    startRow = 3 ' Keep track of the start of the group
+    
+    ' Loop through each row starting at row 4
+    For i = 4 To lastRow
+        If ws.Cells(i, "AD").Value = currentGroupValue Then
+            ' If AD values match, check AM values
+            If ws.Cells(i, "AM").Value <> "" And InStr(concatenatedValue, ws.Cells(i, "AM").Value) = 0 Then
+                ' Concatenate the AM value if it's not already there and not empty
+                If concatenatedValue <> "" Then
+                    concatenatedValue = concatenatedValue & ", "
+                End If
+                concatenatedValue = concatenatedValue & ws.Cells(i, "AM").Value
+            End If
+            ' Clear the current AM cell since it's part of a group
+            ws.Cells(i, "AM").Value = ""
+        Else
+            ' If AD value is different, this is a new group
+            ' Put the concatenated value in the first cell of the previous group
+            ws.Cells(startRow, "AM").Value = concatenatedValue
+            ' Reset variables for the new group
+            currentGroupValue = ws.Cells(i, "AD").Value
+            concatenatedValue = ws.Cells(i, "AM").Value
+            ' Set the new start of the group
+            startRow = i
+        End If
+    Next i
+    
+    ' Set the concatenated value for the last group
+    ws.Cells(startRow, "AM").Value = concatenatedValue
+End Sub
+
+Sub EfficientCompareFormattingMultipleColumns2()
+
+  Dim LastRowAL As Long
+  Dim i As Long, BatchStartRow As Long, BatchEndRow As Long
+
+  With ThisWorkbook.Worksheets("QueryResults") ' Replace with your actual sheet name
+
+    ' Disable screen updating for performance boost
+    Application.ScreenUpdating = False
+
+    ' Find last row with data in AL, excluding headers (if any)
+    LastRowAL = .Cells(.Rows.Count, "AM").End(xlUp).Row
+    If Not IsEmpty(.Cells(1, "AM")) Then ' Check for header in AL
+      LastRowAL = .Range("AM1").Find("*", SearchOrder:=xlByRows, SearchDirection:=xlPrevious).Row - 1
+    End If
+
+    ' Loop through rows in batches (adjust batch size as needed)
+    BatchStartRow = 3
+    For i = 3 To LastRowAL Step 100 ' Adjust batch size based on system resources
+      BatchEndRow = IIf(i + 99 > LastRowAL, LastRowAL, i + 99)
+
+      ' Copy formatting from AJ to AL in a batch
+      .Range("AJ" & BatchStartRow & ":" & "AJ" & BatchEndRow).Copy
+      .Range("AM" & BatchStartRow & ":" & "AM" & BatchEndRow).PasteSpecial Paste:=xlPasteFormats
+      Application.CutCopyMode = False
+
+      BatchStartRow = BatchEndRow + 1
+    Next i
+
+    ' Handle any remaining rows (if batch size doesn't perfectly divide data)
+    If BatchStartRow <= LastRowAL Then
+      .Range("AJ" & BatchStartRow & ":" & "AJ" & LastRowAL).Copy
+      .Range("AM" & BatchStartRow & ":" & "AM" & LastRowAL).PasteSpecial Paste:=xlPasteFormats
+      Application.CutCopyMode = False
+    End If
+
+    ' Re-enable screen updating after the loop
+    Application.ScreenUpdating = True
+
+  End With
+
+End Sub
+
+Sub ConcatenateColumnEBasedOnD()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
+    
+    Dim lastRow As Long
+    lastRow = ws.Cells(ws.Rows.Count, "E").End(xlUp).Row
+    
+    Dim currentGroupValue As String
+    Dim concatenatedValue As String
+    Dim i As Long
+    Dim startRow As Long
+    
+    ' Initialize with the first value
+    currentGroupValue = ws.Cells(3, "D").Value
+    concatenatedValue = ws.Cells(3, "E").Value
+    startRow = 3 ' Keep track of the start of the group
+    
+    ' Loop through each row starting at row 4
+    For i = 4 To lastRow
+        If ws.Cells(i, "D").Value = currentGroupValue Then
+            ' If D values match, check E values
+            If ws.Cells(i, "E").Value <> "" And InStr(concatenatedValue, ws.Cells(i, "E").Value) = 0 Then
+                ' Concatenate the E value if it's not already there and not empty
+                If concatenatedValue <> "" Then
+                    concatenatedValue = concatenatedValue & ", "
+                End If
+                concatenatedValue = concatenatedValue & ws.Cells(i, "E").Value
+            End If
+            ' Clear the current E cell since it's part of a group
+            ws.Cells(i, "E").Value = ""
+        Else
+            ' If D value is different, this is a new group
+            ' Put the concatenated value in the first cell of the previous group
+            ws.Cells(startRow, "E").Value = concatenatedValue
+            ' Reset variables for the new group
+            currentGroupValue = ws.Cells(i, "D").Value
+            concatenatedValue = ws.Cells(i, "E").Value
+            ' Set the new start of the group
+            startRow = i
+        End If
+    Next i
+    
+    ' Set the concatenated value for the last group
+    ws.Cells(startRow, "E").Value = concatenatedValue
+End Sub

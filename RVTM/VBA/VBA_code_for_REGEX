@@ -1,0 +1,13 @@
+Function RegExpMatch(inputString As String, pattern As String) As Variant
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    
+    regex.Pattern = pattern
+    regex.Global = False
+    
+    If regex.test(inputString) Then
+        RegExpMatch = regex.Execute(inputString)(0)
+    Else
+        RegExpMatch = "False"
+    End If
+End Function

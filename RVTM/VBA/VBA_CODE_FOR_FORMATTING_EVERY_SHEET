@@ -1,0 +1,78 @@
+Sub FormatSheet()
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+    Application.Calculation = xlCalculationManual
+
+    Dim rng As Range
+    Dim headerRow As Range
+    Dim wrapAreas As Range
+    Dim wrapArea As Range
+    Dim dataArr As Variant
+    Dim numRows As Long
+    Dim numCols As Long
+    Dim i As Long, j As Long
+    
+    'Disable automatic calculations
+    Application.Calculation = xlCalculationManual
+    
+    'Select the entire data range
+    Set rng = ActiveSheet.UsedRange
+    
+    'Assign the data range to an array for faster processing
+    dataArr = rng.Value
+    
+    'Get the number of rows and columns
+    numRows = UBound(dataArr, 1)
+    numCols = UBound(dataArr, 2)
+    
+    'Apply border around the data range
+    rng.BorderAround LineStyle:=xlContinuous, Weight:=xlThin
+    
+    'Apply borders to all selected columns and cells
+    rng.Borders.LineStyle = xlContinuous
+    rng.Borders.Weight = xlThin
+    
+    'Format the header row as bold with a different background color
+    Set headerRow = rng.Rows(1)
+    headerRow.Font.Bold = True
+    headerRow.Interior.Color = RGB(217, 217, 217)
+    
+    'Wrap text in cells with long text and adjust row heights
+    For i = 1 To numRows
+        For j = 1 To numCols
+            If rng.Cells(i, j).WrapText Then
+                If wrapAreas Is Nothing Then
+                    Set wrapAreas = rng.Cells(i, j)
+                Else
+                    Set wrapAreas = Union(wrapAreas, rng.Cells(i, j))
+                End If
+            End If
+        Next j
+    Next i
+    
+    If Not wrapAreas Is Nothing Then
+        For Each wrapArea In wrapAreas.Areas
+            wrapArea.Rows.AutoFit
+        Next wrapArea
+    End If
+    
+    'Auto-adjust column widths
+    rng.Columns.AutoFit
+    
+    'Ensure a minimum column width of 25
+    For j = 1 To numCols
+        If rng.Columns(j).ColumnWidth < 25 Then
+            rng.Columns(j).ColumnWidth = 25
+        End If
+    Next j
+    
+    'Resize the Excel screen to 70%
+    Application.WindowState = xlNormal
+    ActiveWindow.WindowState = xlNormal
+    ActiveWindow.Zoom = 70
+    
+    'Re-enable Excel features and calculate
+    Application.ScreenUpdating = True
+    Application.EnableEvents = True
+    Application.Calculation = xlCalculationAutomatic
+End Sub

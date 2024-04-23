@@ -1,0 +1,56 @@
+Sub ExtractValues()
+    Dim lastRow As Long
+    Dim i As Long
+    Dim cellValue As Variant
+    Dim extractedText As String
+    Dim valuesArr As Variant
+    Dim separatorPos As Long
+    
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    
+    lastRow = Cells(Rows.Count, "F").End(xlUp).Row
+    
+    ' Copy values from column F to an array
+    valuesArr = Range("F1:F" & lastRow).Value
+    
+    For i = 1 To lastRow
+        cellValue = valuesArr(i, 1)
+        
+        ' Check if the cell is empty
+        If Len(cellValue) = 0 Then
+            ' Leave column G cell blank
+            valuesArr(i, 1) = ""
+        Else
+            ' Find the last occurrence of "-" or "_"
+            Dim hyphenPos As Long
+            Dim underscorePos As Long
+            
+            hyphenPos = InStrRev(cellValue, "-")
+            underscorePos = InStrRev(cellValue, "_")
+            
+            If hyphenPos > underscorePos Then
+                separatorPos = hyphenPos
+            Else
+                separatorPos = underscorePos
+            End If
+            
+            If separatorPos > 0 Then
+                ' Remove the numbers along with the separator
+                extractedText = Left(cellValue, separatorPos - 1)
+            Else
+                ' No separator found, store full cell value in the array
+                extractedText = cellValue
+            End If
+            
+            ' Store the extracted text in the array
+            valuesArr(i, 1) = extractedText
+        End If
+    Next i
+    
+    ' Paste the values from the array to column G
+    Range("G1:G" & lastRow).Value = valuesArr
+    
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+End Sub

@@ -1,0 +1,60 @@
+Sub RemoveApproximateMatchingNames()
+    Dim nameListRange As Range
+    Dim cell As Range
+    Dim listName As Range
+    Dim allNames As Variant
+    Dim remainingNames As String
+    Dim name As Variant
+    Dim lastRow As Long
+    Dim found As Boolean
+    
+    ' Set the range for the list of names against which you want to compare
+    Set nameListRange = Range("F2:F63")
+    
+    ' Find the last row in column C with data
+    lastRow = Cells(Rows.Count, "C").End(xlUp).Row
+    
+    ' Loop through all the cells in column C starting from row 2
+    For Each cell In Range("C2:C" & lastRow)
+        ' Initialize the remaining names as blank
+        remainingNames = ""
+        
+        ' Check if the cell is not empty
+        If Not IsEmpty(cell.Value) Then
+            ' Load all names from the cell, remove double quotes, and split by newline
+            allNames = Split(Replace(cell.Value, """", ""), Chr(10))
+            
+            ' Loop through all the names within the cell
+            For Each name In allNames
+                name = Trim(name) ' Trim the name to remove any extra spaces
+                found = False ' Initialize as not found
+                
+                ' Compare with the names in the range F2:F45 for approximate match
+                For Each listName In nameListRange
+                    If InStr(1, name, listName.Value, vbTextCompare) > 0 Then
+                        found = True ' Approximate match found
+                        Exit For
+                    End If
+                Next listName
+                
+                ' If the name is not found, add it to the remaining names string
+                If Not found Then
+                    If remainingNames = "" Then
+                        remainingNames = name
+                    Else
+                        remainingNames = remainingNames & Chr(10) & name
+                    End If
+                End If
+            Next name
+            
+            ' Output the remaining names to the corresponding cell in column D
+            Cells(cell.Row, "D").Value = remainingNames
+        Else
+            ' If the cell is empty, copy the empty value to column D
+            Cells(cell.Row, "D").Value = ""
+        End If
+    Next cell
+    
+    ' Inform the user that the script has finished running
+    MsgBox "Names have been processed.", vbInformation
+End Sub

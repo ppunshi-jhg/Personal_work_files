@@ -1,0 +1,14 @@
+1. When you get the actual duplicate id's from the RATM- you would see it will be refereed to different requirement reference.
+2. You go and filter out each requirement reference in the RATM and go to the database filter out those duplicate id which belong to that requirement reference and add L-satisfied by and L-satisfies link into it. Then save the view and export it
+3. Do the above step for all the requirment reference separately and export it separately and then paste all the exported data into one sheet
+4. Then see if there is any difference in duplicates reference
+    1. For example- you will see one id will have the reference to hazard log safety requirement and that requirement has been assigned to different packages and the same other id which has a reference to PSR has been allocated to different packages in DOORs- but in the actual RATM you will see all the packages in one cell because API exporter works like that.The other difference could be one id will satisfy some controls but the other not.
+
+
+Question: Why L-SATISFIED BY link has the same attribute even though its coming from the DOORs like other.- Because when we do the linkage of L-Satisfied in hazard log requirements- as these has duplicates in PSR document thats why you see the same linkage there.
+It will change the text of L-satisfied by link as well because there are different packages been allocated to the requirement referred to PSR and we didn't do the L-satisfied for them because when you concatenate with the packages of PSR the more links will be added
+
+
+Steps to resolve this issue:
+
+* When we put our comments along with the duplicated reqs- to resolve duplicate reqs from the RAATM- as we want to keep PSR requirements where reqs are referred to PSR - as PSR has the same L-satisfied by and L-satisfies linkage which we create with the hazard log req- but PSR reqs are linked with different packages and different controls so we went to those reqs separately based on PSR documents and create the linkage for L-satisfied by and L-satisfies by - by this way it will concatenate everything together.

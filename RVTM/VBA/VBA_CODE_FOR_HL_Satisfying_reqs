@@ -1,0 +1,45 @@
+Sub ExtractData()
+    Dim lastRow As Long
+    Dim i As Long
+    Dim data As String
+    Dim entries() As String
+    
+    lastRow = ActiveSheet.Cells(Rows.Count, "AL").End(xlUp).Row
+
+    For i = 1 To lastRow
+        If Not IsEmpty(ActiveSheet.Cells(i, "AL")) Then
+            data = CStr(ActiveSheet.Cells(i, "AL").Value)
+            
+            ' Check if data includes a dot (.) and only one entry
+            If InStr(data, ".") > 0 And InStr(data, ",") = 0 And InStr(data, Chr(10)) = 0 Then
+                entries = Split(data, ".")
+                ActiveSheet.Cells(i, "AM").Value = entries(1)
+            
+            ' Check if data includes multiple entries separated by comma or line break
+            ElseIf InStr(data, ".") > 0 And (InStr(data, ",") > 0 Or InStr(data, Chr(10)) > 0) Then
+                entries = Split(data, ",")
+                data = ""
+                
+                For j = 0 To UBound(entries)
+                    lineEntries = Split(entries(j), Chr(10))
+                    For k = 0 To UBound(lineEntries)
+                        If InStr(lineEntries(k), ".") > 0 Then
+                            parts = Split(lineEntries(k), ".")
+                            data = data & parts(1)
+                            
+                            If k < UBound(lineEntries) Then
+                                data = data & ", "
+                            End If
+                        End If
+                    Next k
+                    
+                    If j < UBound(entries) Then
+                        data = data & ", "
+                    End If
+                Next j
+                
+                ActiveSheet.Cells(i, "AM").Value = data
+            End If
+        End If
+    Next i
+End Sub

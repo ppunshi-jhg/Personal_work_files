@@ -1,0 +1,32 @@
+Question 1- Lets say you check the artifact id in the module context and you will see the L-caused by links
+where you will see "in this module" and "in all module"- but the links which are prresent in the "in all module"
+that link is related to module and global context- Global to artifact / module to artifact.
+Question 2- When the global artifact is created, how the module artifact is created at a later stage
+Question 3- if the module artifact is created then how the links has been created.
+Question- Either we check in module(like hazard register) or check in global context it shows the same L-caused by text which is from module("in this module only)
+Question5- At one point- I have seen "in all module" id in the L-caused text attribute
+
+
+	• Global Artifact- When you create the artifact in the global context- like in All
+	• Module Context- When you create the artifact in module context.
+
+
+Module to module linkage-
+
+For example- Artifact id- 1745191 is an id which has been created in global context as well as in the module itself(hazard register). When you look at this ID in the hazard register and see the caused by Linked artifacts- you will see those artifacts "in this module" only which means module context to/from another artifact linkage  And you will see artifact which is "in all module" - it means the following links are global to/from another artefact.
+
+To determine the context of the artefact check if it says the module name directly in the link text(l-caused by attribiute, l-satisfied by attribute,l-mitigated by attribute) etc
+	• If it does show up the text it means that link which is showing in caused by, satisfied by it is a module context
+	• If it doesn’t show up in the text it means that link which is showing in caused by, satisfied by it is a global context.
+
+Linkage- 
+
+	• You can create L-satisfied by, L-caused by etc attribute text for the satisfied by and caused by linkage- which will show the text with module_id.artifact_id- which wont show up the text for the artifact which is not in the module("in all module")
+	• Then, you can create the link text by yourself- like adding module_id.link_id
+	• Then, you can create links from the text attribute to caused by, satisfied by links.
+
+
+Step - Add ids to the attribiute(L-caused by, L-satisfied by, L-mitigated by) for each existing link of the specified type(caused by, satisfied by, mitigated by)- which will add the text into the attribute. Don’t click on remove id's that don’t have a matching link. Because by that time- L-caused by etc attribute wont have anything- we're creating this first time.
+Step- Create links for all ID's in the attribute- means once you add the link text manually for the link "in all module" in the caused by, satisfiued by etc link - it will create the linkage in caused by, satisfied by links in "in this module".
+Step- As we have created link for the global to artifact linkage in "in this module" category- now we can remove that linkage from the global artifact.
+Step- we go to global artiafct- create temp type attribute and create links for all Id's in the attribute(attribute is temp value) and select remove links that don’t have matching id- as the links are not present in temp value so it will overide the previous links and remove the links from global context.

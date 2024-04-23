@@ -1,0 +1,40 @@
+Sub MergeCenterCells()
+    Dim lastRow As Long
+    Dim i As Long, mergeStart As Long, mergeEnd As Long
+    Dim currentValue As String, nextValue As String
+    
+    Application.DisplayAlerts = False ' Disable alert prompts
+    
+    lastRow = Cells(Rows.Count, "A").End(xlUp).Row
+    
+    mergeStart = 2 ' Starting row for merging
+    
+    For i = 2 To lastRow - 1
+        currentValue = Cells(i, "A").Value
+        nextValue = Cells(i + 1, "A").Value
+        
+        If currentValue = nextValue Then
+            mergeEnd = i + 1
+        Else
+            If mergeEnd > mergeStart Then
+                With Range(Cells(mergeStart, "A"), Cells(mergeEnd, "A"))
+                    .HorizontalAlignment = xlCenter ' Center align merged cells
+                    .VerticalAlignment = xlCenter
+                    .MergeCells = True ' Merge cells
+                End With
+            End If
+            
+            mergeStart = i + 1 ' Update mergeStart for the next group
+        End If
+    Next i
+    
+    If mergeEnd > mergeStart Then
+        With Range(Cells(mergeStart, "A"), Cells(mergeEnd, "A"))
+            .HorizontalAlignment = xlCenter ' Center align merged cells
+            .VerticalAlignment = xlCenter
+            .MergeCells = True ' Merge cells
+        End With
+    End If
+    
+    Application.DisplayAlerts = True ' Enable alert prompts
+End Sub

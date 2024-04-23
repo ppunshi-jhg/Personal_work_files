@@ -1,0 +1,9 @@
+1. We're looking at the technical requirements which is -5379
+2. We're looking at if this requirement has been allocated even to a one single package in all the allocations
+3. Has non-afc true for those requirements as well where we have single non-afc
+4. Has non-afc false means- its a technical requirement which just cerified packages? What about those requirements which has been allocated to packages which contain AFC and Non-afc
+* Aren't we checking those requirements where a technical requirements is even assigned to one AFC package?
+
+
+Other way to do this? 
+

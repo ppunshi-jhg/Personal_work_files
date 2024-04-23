@@ -1,0 +1,54 @@
+Sub FormatHeadingsAndNumbering()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet ' Or specify your sheet, e.g., ThisWorkbook.Sheets("Sheet1")
+    
+    Dim currentRow As Long
+    Dim lastRow As Long
+    lastRow = ws.Cells(ws.Rows.Count, "D").End(xlUp).Row
+    
+    Dim headingNumber As String
+    Dim tempNumber As String
+    
+    For currentRow = 2 To lastRow
+        If ws.Cells(currentRow, "E").Value = "Heading" Then
+            ' Extract the numbering from column D and place it in column C if column E is "Heading"
+            headingNumber = ExtractNumbering(ws.Cells(currentRow, "D").Value)
+            ws.Cells(currentRow, "C").Value = headingNumber
+        Else
+            If headingNumber <> "" Then
+                tempNumber = ExtractNumbering(ws.Cells(currentRow, "D").Value)
+                If tempNumber <> "" Then
+                    ' Concatenate the additional numbering
+                    ws.Cells(currentRow, "C").Value = headingNumber & " " & tempNumber
+                Else
+                    ' Paste the heading number without concatenation
+                    ws.Cells(currentRow, "C").Value = headingNumber
+                End If
+            End If
+        End If
+    Next currentRow
+End Sub
+
+Function ExtractNumbering(cellValue As String) As String
+    ' Adjust the pattern to match the numbering system used, including "Table F7-3.1", "Item 2", "item 3", etc.
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    With regex
+        .Global = True
+        .IgnoreCase = True
+        .Pattern = "^(?:Table\s+)?(F\d+(?:-\d+(?:\.\d+)?)?|\bitem\s+(\d+))"
+        If .Test(cellValue) Then
+            Dim matches As Object
+            Set matches = .Execute(cellValue)
+            If matches(0).SubMatches(1) <> "" Then
+                ' If the match is from "Item 2", "item 3", etc., use the second submatch
+                ExtractNumbering = matches(0).SubMatches(1)
+            Else
+                ' Otherwise, use the full match
+                ExtractNumbering = matches(0).Value
+            End If
+        Else
+            ExtractNumbering = ""
+        End If
+    End With
+End Function
