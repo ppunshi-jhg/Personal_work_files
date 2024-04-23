@@ -1,4 +1,4 @@
-import re
+
 
 # Define the file paths as raw strings or use double backslashes
 input_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Desktop\final-ratm.txt'
