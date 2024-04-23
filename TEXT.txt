@@ -10,4 +10,4 @@ Area 310-Utilities - APA Gas Design Package #2        
 Area 330-Utilities - APA Gas Design Package #3        
 Area 310-Sewer Design Case Design Package #1        
 Area 310-Utilities - Telstra/NBN Design Package #1        
-Area 330-Utilities - Telco Optus Design Package #13        
+Area 330-Utilities - Telco Optus Design Package #13      
