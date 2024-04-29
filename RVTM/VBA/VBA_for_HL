@@ -1,37 +1,28 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Sheet2"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = True
 Sub HazardLogFormattingSetp1()
     Dim lastRow As Long
     lastRow = Cells(Rows.Count, "A").End(xlUp).Row
     
     Rows(1).Insert
-    Columns("L").Insert
-    ThisWorkbook.Worksheets("QueryResults").Range("L2").Value = "Initial Risk Rating"
-    Columns("U").Insert
-    ThisWorkbook.Worksheets("QueryResults").Range("U2").Value = "Residual Risk Rating"
+    Columns("O").Insert
+    ThisWorkbook.Worksheets("QueryResults").Range("O2").Value = "Initial Risk Rating"
+    Columns("X").Insert
+    ThisWorkbook.Worksheets("QueryResults").Range("X2").Value = "Residual Risk Rating"
     
     ThisWorkbook.Worksheets("QueryResults").Range("A1").Value = "TLE"
     Range("A1:B1").Merge
     ThisWorkbook.Worksheets("QueryResults").Range("C1").Value = "[Linked] Hazard"
-    Range("C1:X1").Merge
-    ThisWorkbook.Worksheets("QueryResults").Range("Y1").Value = "[Linked] Cause"
-    Range("Y1:AA1").Merge
-    ThisWorkbook.Worksheets("QueryResults").Range("AB1").Value = "[Linked] Control"
-    Range("AB1:AG1").Merge
+    Range("C1:AA1").Merge
+    ThisWorkbook.Worksheets("QueryResults").Range("AB1").Value = "[Linked] Cause"
+    Range("AB1:AD1").Merge
+    ThisWorkbook.Worksheets("QueryResults").Range("AE1").Value = "[Linked] Control"
+    Range("AE1:AL1").Merge
     
     Range("A1:B2").Interior.Color = RGB(252, 213, 180)
-    Range("C1:X2").Interior.Color = RGB(183, 222, 232)
-    Range("Y1:AA2").Interior.Color = RGB(204, 192, 218)
-    Range("AB1:AG2").Interior.Color = RGB(216, 228, 188)
+    Range("C1:AA2").Interior.Color = RGB(183, 222, 232)
+    Range("AB1:AD2").Interior.Color = RGB(204, 192, 218)
+    Range("AE1:AN2").Interior.Color = RGB(216, 228, 188)
     
-    With ThisWorkbook.Worksheets("QueryResults").Range("A1:AG2")
+    With ThisWorkbook.Worksheets("QueryResults").Range("A1:AN2")
         .Font.Size = 11
         .Font.Bold = True
     End With
@@ -69,6 +60,13 @@ Sub HazardLogFormattingSetp1()
     Columns("AE").ColumnWidth = 23
     Columns("AF").ColumnWidth = 23
     Columns("AG").ColumnWidth = 31
+    Columns("AH").ColumnWidth = 23
+    Columns("AI").ColumnWidth = 23
+    Columns("AJ").ColumnWidth = 23
+    Columns("AK").ColumnWidth = 23
+    Columns("AL").ColumnWidth = 23
+    Columns("AM").ColumnWidth = 23
+    Columns("AN").ColumnWidth = 23
     
 End Sub
 
@@ -91,9 +89,9 @@ Sub HazardLogFormattingSetp2()
     Set rngA = ws.Range("A3:A" & lastRow)
     Set rngB = ws.Range("B3:B" & lastRow)
     Set rngC = ws.Range("C3:C" & lastRow)
-    Set rngD = ws.Range("D3:X" & lastRow)
-    Set rngY = ws.Range("Y3:AA" & lastRow)
-    Set rngAB = ws.Range("AB3:AG" & lastRow)
+    Set rngD = ws.Range("D3:Z" & lastRow)
+    Set rngY = ws.Range("AA3:AC" & lastRow)
+    Set rngAB = ws.Range("AD3:AJ" & lastRow)
     
     ' Clear any existing conditional formatting in the range
     rngA.FormatConditions.Delete
@@ -151,12 +149,12 @@ Sub HazardLogFormattingSetp2()
     rngY.FormatConditions.Delete
     
     ' Add a new conditional formatting rule
-    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$Y3=$Y2")
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3=$AA2")
         .Font.Color = RGB(255, 255, 255) ' Set the font color to white
     End With
     
     ' Add a new conditional formatting rule
-    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$Y3<>$Y2")
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3<>$AA2")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
     End With
     
@@ -164,23 +162,24 @@ Sub HazardLogFormattingSetp2()
     rngAB.FormatConditions.Delete
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AB3<>$AB2,$Y3=$Y2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3=$AA2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AB3<>$AB2,$Y3<>$Y2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3<>$AA2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AB3=$AB2,$Y3=$Y2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3=$AA2)")
         .Font.Color = RGB(255, 255, 255) ' Set the font color to white
     End With
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AB3=$AB2,$Y3<>$Y2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3<>$AA2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     
     
 End Sub
+
