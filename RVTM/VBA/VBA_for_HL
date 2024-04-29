@@ -183,3 +183,6 @@ Sub HazardLogFormattingSetp2()
     
 End Sub
 
+Formula for the HazardLog
+
+=IFERROR(VLOOKUP(N2,SafetyRiskMatrix!$A$1:$F$7,NUMBERVALUE(LEFT(QueryResults!M2,1))+1,FALSE),"")
