@@ -1,0 +1,45 @@
+Sub FormatExcelSheetFast()
+
+  Dim ws As Worksheet
+
+  ' Option 1: Use ActiveWorkbook
+  ' Set ws to the active sheet in the currently active workbook
+  Set ws = ActiveWorkbook.ActiveSheet
+
+  ' Disable screen updating and automatic calculation for speed
+  Application.ScreenUpdating = False
+  Application.Calculation = xlCalculationManual
+
+  ' Use efficient UsedRange property to get data range
+  Dim usedRange As Range
+  Set usedRange = ws.usedRange
+
+  ' Apply borders to all cells at once
+  With usedRange.Borders
+    .LineStyle = xlContinuous
+    .Weight = xlThin
+  End With
+
+  ' Set column width to 30 for all columns (faster than individual)
+  usedRange.EntireColumn.ColumnWidth = 30
+
+  ' Wrap text for all columns (faster than individual cells)
+  usedRange.Cells.WrapText = True
+
+  ' Format first row (faster than individual cell formatting)
+  With ws.Rows(1)
+    .Font.Bold = True
+    .Interior.Color = RGB(255, 255, 0) ' Yellow color
+    .HorizontalAlignment = xlCenter
+    .RowHeight = 30
+  End With
+
+  ' Restore screen updating and automatic calculation
+  Application.ScreenUpdating = True
+  Application.Calculation = xlCalculationAutomatic
+
+  ' Zoom out to 70%
+  ws.Parent.Windows(1).Zoom = 70
+
+End Sub
+
