@@ -15,7 +15,7 @@ Sub HazardLogFormattingSetp1()
     ThisWorkbook.Worksheets("QueryResults").Range("AB1").Value = "[Linked] Cause"
     Range("AB1:AD1").Merge
     ThisWorkbook.Worksheets("QueryResults").Range("AE1").Value = "[Linked] Control"
-    Range("AE1:AL1").Merge
+    Range("AE1:AN1").Merge
     
     Range("A1:B2").Interior.Color = RGB(252, 213, 180)
     Range("C1:AA2").Interior.Color = RGB(183, 222, 232)
@@ -89,9 +89,9 @@ Sub HazardLogFormattingSetp2()
     Set rngA = ws.Range("A3:A" & lastRow)
     Set rngB = ws.Range("B3:B" & lastRow)
     Set rngC = ws.Range("C3:C" & lastRow)
-    Set rngD = ws.Range("D3:Z" & lastRow)
-    Set rngY = ws.Range("AA3:AC" & lastRow)
-    Set rngAB = ws.Range("AD3:AJ" & lastRow)
+    Set rngD = ws.Range("D3:AA" & lastRow)
+    Set rngY = ws.Range("AB3:AD" & lastRow)
+    Set rngAB = ws.Range("AE3:AN" & lastRow)
     
     ' Clear any existing conditional formatting in the range
     rngA.FormatConditions.Delete
@@ -149,12 +149,12 @@ Sub HazardLogFormattingSetp2()
     rngY.FormatConditions.Delete
     
     ' Add a new conditional formatting rule
-    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3=$AA2")
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AB3=$AB2")
         .Font.Color = RGB(255, 255, 255) ' Set the font color to white
     End With
     
     ' Add a new conditional formatting rule
-    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3<>$AA2")
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AB3<>$AB2")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
     End With
     
@@ -162,21 +162,21 @@ Sub HazardLogFormattingSetp2()
     rngAB.FormatConditions.Delete
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3=$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3<>$AE2,$AB3=$AB2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3<>$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3<>$AE2,$AB3<>$AB2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3=$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3=$AE2,$AB3=$AB2)")
         .Font.Color = RGB(255, 255, 255) ' Set the font color to white
     End With
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3<>$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3=$AE2,$AB3<>$AB2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     
