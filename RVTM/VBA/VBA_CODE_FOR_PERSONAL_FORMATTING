@@ -12,7 +12,7 @@ Sub FormatExcelSheetFast()
 
   ' Use efficient UsedRange property to get data range
   Dim usedRange As Range
-  Set usedRange = ws.usedRange
+  Set usedRange = ws.UsedRange
 
   ' Apply borders to all cells at once
   With usedRange.Borders
@@ -29,9 +29,14 @@ Sub FormatExcelSheetFast()
   ' Format first row (faster than individual cell formatting)
   With ws.Rows(1)
     .Font.Bold = True
-    .Interior.Color = RGB(255, 255, 0) ' Yellow color
     .HorizontalAlignment = xlCenter
     .RowHeight = 30
+    ' Adjust the range to include only the used range in the first row
+    Dim lastColumn As Long
+    lastColumn = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    Dim dataRange As Range
+    Set dataRange = ws.Range(ws.Cells(1, 1), ws.Cells(1, lastColumn))
+    .Resize(, dataRange.Columns.Count).Interior.Color = RGB(255, 255, 0)
   End With
 
   ' Restore screen updating and automatic calculation
@@ -42,4 +47,3 @@ Sub FormatExcelSheetFast()
   ws.Parent.Windows(1).Zoom = 70
 
 End Sub
-
