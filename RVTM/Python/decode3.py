@@ -1,14 +1,14 @@
 
 
 # Define the file paths as raw strings or use double backslashes
-input_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Desktop\final-ratm.txt'
-output_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Desktop\revisionratm.txt'
+input_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Desktop\3307239REQIF.csv'
+output_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Desktop\3307239REQIF3.csv'
 
 try:
     with open(input_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
-    # Replace specific octal codes with their respective characters
+
     content = content.replace('\\044', ',')  # Replace \044 with comma
     content = content.replace('\\034', '"')  # Replace \034 with double quotes
     content = content.replace('\\010', '\n') # Replace \010 with new line

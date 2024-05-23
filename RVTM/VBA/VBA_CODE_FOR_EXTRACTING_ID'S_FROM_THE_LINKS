@@ -1,0 +1,45 @@
+Sub ExtractNumbers()
+    Dim LastRow As Long
+    Dim Texts As Variant
+    Dim Numbers As Variant
+    Dim i As Long
+    Dim Matches As Object
+    Dim Match As Object
+    
+    ' Get the last row in column F
+    LastRow = Cells(Rows.Count, "F").End(xlUp).Row
+    
+    ' Read the values in column F into an array
+    Texts = Range("F2:F" & LastRow).Value
+    
+    ' Initialize an empty array for the numbers
+    ReDim Numbers(1 To UBound(Texts, 1), 1 To 1)
+    
+    ' Loop through each value in the array and extract the numbers
+    For i = 1 To UBound(Texts, 1)
+        If Not IsEmpty(Texts(i, 1)) Then
+            ' Extract the numbers using regular expressions
+            With CreateObject("VBScript.RegExp")
+                .Pattern = "(\d+):"
+                .Global = True
+                
+                ' Check if there is a match in the text
+                If .Test(Texts(i, 1)) Then
+                    ' Get all the matches
+                    Set Matches = .Execute(Texts(i, 1))
+                    
+                    ' Loop through each match and append it to the numbers string
+                    For Each Match In Matches
+                        Numbers(i, 1) = Numbers(i, 1) & Match.SubMatches(0) & ", "
+                    Next Match
+                    
+                    ' Remove the trailing comma and space
+                    Numbers(i, 1) = Left(Numbers(i, 1), Len(Numbers(i, 1)) - 2)
+                End If
+            End With
+        End If
+    Next i
+    
+    ' Write the numbers array to the adjacent cells in column G
+    Range("G2:G" & LastRow).Value = Numbers
+End Sub
