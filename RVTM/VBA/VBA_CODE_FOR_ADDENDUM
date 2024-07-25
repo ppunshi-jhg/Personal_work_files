@@ -1,0 +1,41 @@
+Sub CompareValues()
+    Dim lastRow As Long
+    Dim i As Long
+    Dim textA As String
+    Dim textB As String
+    Dim idA As String
+    Dim idB As String
+    Dim splitA() As String
+    Dim splitB() As String
+    
+    lastRow = Cells(Rows.Count, "A").End(xlUp).Row
+    
+    For i = 2 To lastRow
+        textA = Cells(i, "A").Value
+        textB = Cells(i, "B").Value
+        
+        ' Split the text to get the ID at the end
+        If InStr(textA, "|") > 0 Then
+            splitA = Split(textA, "|")
+            idA = splitA(UBound(splitA))
+            textA = Left(textA, Len(textA) - Len(idA) - 1)
+        Else
+            textA = textA
+        End If
+        
+        If InStr(textB, "|") > 0 Then
+            splitB = Split(textB, "|")
+            idB = splitB(UBound(splitB))
+            textB = Left(textB, Len(textB) - Len(idB) - 1)
+        Else
+            textB = textB
+        End If
+        
+        If Trim(textA) = Trim(textB) And Not IsEmpty(Cells(i, "A").Value) And Not IsEmpty(Cells(i, "B").Value) Then
+            Cells(i, "D").Value = "YES"
+        Else
+            Cells(i, "D").Value = "NO"
+        End If
+    Next i
+End Sub
+
