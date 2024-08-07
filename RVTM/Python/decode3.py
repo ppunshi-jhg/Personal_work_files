@@ -1,8 +1,8 @@
 
 
 # Define the file paths as raw strings or use double backslashes
-input_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Desktop\3307239REQIF.csv'
-output_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Desktop\3307239REQIF3.csv'
+input_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Documents\RATM-2024-05-26-15-37-13.txt'
+output_path = r'C:\Users\ppunshi\OneDrive - John Holland Group\Documents\RATM.txt'
 
 try:
     with open(input_path, 'r', encoding='utf-8') as file:
