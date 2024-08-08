@@ -1,0 +1,38 @@
+Function ExtractClauseNumber(inputText As String) As String
+    Dim re As Object
+    Dim match As Object
+    Dim result As String
+    
+    Set re = CreateObject("VBScript.RegExp")
+    re.Global = True
+    re.IgnoreCase = True
+    
+    
+    re.Pattern = "(\d+(?:\.\d+)*(?:\.\d+)*|\(\w\)|[A-Z](?:\.\d+)*|\(\w+\)|\(\d+\)|\d+(?:\.\d+)+|[A-Z]\.\d+(?:\.\d+)*(?:\.\d+)*)"
+    
+    If re.Test(inputText) Then
+        Set match = re.Execute(inputText)
+        ' Check if the match is valid (not empty)
+        If match.Count > 0 Then
+            ' Return the first match (clause number)
+            ExtractClauseNumber = match(0).value
+        Else
+            ' Check if the content starts with a whole word or a pipe symbol
+            If re.Test(Left(inputText, 1)) Or Left(inputText, 1) = "|" Then
+                ExtractClauseNumber = "Not found"
+            Else
+                ' Check if the content starts with a letter followed by numbers
+                re.Pattern = "([A-Z]\.\d+(?:\.\d+)*(?:\.\d+)*)"
+                If re.Test(inputText) Then
+                    Set match = re.Execute(inputText)
+                    ExtractClauseNumber = match(0).value
+                Else
+                    ExtractClauseNumber = "Not found" ' No valid match found
+                End If
+            End If
+        End If
+    Else
+        ExtractClauseNumber = "Not found" ' No match found
+    End If
+End Function
+

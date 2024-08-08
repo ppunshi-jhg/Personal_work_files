@@ -1,0 +1,57 @@
+Sub ExtractContent()
+    Dim lastRow As Long
+    Dim dataRange As Range
+    Dim data As Variant
+    Dim result() As Variant
+    Dim i As Long
+    Dim regexPattern As String
+    
+    ' Set the pattern for the regex to match the content
+    regexPattern = "^(?:\d+\.?)+(?:\.\d+)?|\([a-zA-Z]\)|[a-zA-Z](?!\|)\s\||[ivx]+\)|[A-Za-z]\.\s"
+    
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+    
+    ' Get the last row in column E
+    lastRow = Cells(Rows.Count, "E").End(xlUp).Row
+    
+    ' Get the range of data in column E
+    Set dataRange = Range("E3:E" & lastRow)
+    
+    ' Read the data into an array for faster processing
+    data = dataRange.Value
+    
+    ' Resize the result array to match the size of the data array
+    ReDim result(1 To UBound(data, 1), 1 To 1)
+    
+    ' Loop through each element in the data array
+    For i = 1 To UBound(data, 1)
+        ' Get the content of the cell
+        Dim content As String
+        content = Trim(CStr(data(i, 1)))
+        
+        ' Check if the content matches the pattern
+        If Not RegExTest(content, regexPattern) Then
+            ' If it doesn't match, put "Not found" in the respective element of the result array
+            result(i, 1) = "Not found"
+        End If
+    Next i
+    
+    ' Write the result back to column F
+    Range("F3").Resize(UBound(result, 1)).Value = result
+    
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+End Sub
+
+Function RegExTest(ByVal strInput As String, ByVal strPattern As String) As Boolean
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    
+    With regex
+        .Pattern = strPattern
+        .IgnoreCase = True
+        .Global = False
+        RegExTest = .Test(strInput)
+    End With
+End Function
