@@ -1,0 +1,54 @@
+Sub ConcatenateValuesWithConditionalStrikeThrough()
+    Dim ws As Worksheet
+    Dim i As Long
+    Dim lastRow As Long
+    Dim concatB As String, concatD As String, concatF As String, concatH As String
+    Dim startRow As Long
+    
+    Set ws = ActiveSheet
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    startRow = 2
+    
+    For i = 2 To lastRow
+        If ws.Cells(i, "A").Value <> "" And i > 2 Then
+            ws.Cells(startRow - 1, "C").Value = Trim(concatB)
+            ws.Cells(startRow - 1, "E").Value = Trim(concatD)
+            ws.Cells(startRow - 1, "G").Value = Trim(concatF)
+            ws.Cells(startRow - 1, "I").Value = Trim(concatH)
+            concatB = ws.Cells(i, "B").Value
+            concatD = ws.Cells(i, "D").Value
+            concatF = ws.Cells(i, "F").Value
+            concatH = ws.Cells(i, "H").Value
+            startRow = i + 1
+        Else
+            If ws.Cells(i, "B").Value <> "" Then
+                If concatB <> "" Then concatB = concatB & Chr(10)
+                concatB = concatB & ws.Cells(i, "B").Value
+                ws.Cells(i, "B").Font.Strikethrough = True
+            End If
+            If ws.Cells(i, "D").Value <> "" Then
+                If concatD <> "" Then concatD = concatD & Chr(10)
+                concatD = concatD & ws.Cells(i, "D").Value
+                ws.Cells(i, "D").Font.Strikethrough = True
+            End If
+            If ws.Cells(i, "F").Value <> "" Then
+                If concatF <> "" Then concatF = concatF & Chr(10)
+                concatF = concatF & ws.Cells(i, "F").Value
+                ws.Cells(i, "F").Font.Strikethrough = True
+            End If
+            If ws.Cells(i, "H").Value <> "" Then
+                If concatH <> "" Then concatH = concatH & Chr(10)
+                concatH = concatH & ws.Cells(i, "H").Value
+                ws.Cells(i, "H").Font.Strikethrough = True
+            End If
+        End If
+    Next i
+    
+    ' Assign the concatenated strings to the last set of cells
+    ws.Cells(startRow - 1, "C").Value = Trim(concatB)
+    ws.Cells(startRow - 1, "E").Value = Trim(concatD)
+    ws.Cells(startRow - 1, "G").Value = Trim(concatF)
+    ws.Cells(startRow - 1, "I").Value = Trim(concatH)
+End Sub
+
+

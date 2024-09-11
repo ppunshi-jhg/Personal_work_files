@@ -28,8 +28,7 @@ Sub ExtractContent()
     For i = 1 To UBound(data, 1)
         ' Get the content of the cell
         Dim content As String
-        content = Trim(CStr(data(i, 1)))
-        
+        content = Trim(CStr(data(i, 1)))        
         ' Check if the content matches the pattern
         If Not RegExTest(content, regexPattern) Then
             ' If it doesn't match, put "Not found" in the respective element of the result array
