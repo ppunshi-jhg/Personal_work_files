@@ -1,0 +1,14 @@
+MID(B2, SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) + 1, SEARCH("@", SUBSTITUTE(B2, "]", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "]", "")))) - SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) - 1)
+
+TEXTJOIN(".",TRUE,XLOOKUP(E2,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$C:$C,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$F:$F,"NF",0),XLOOKUP(E2,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$C:$C,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$A:$A,"NF",0))
+
+TEXTJOIN(",", TRUE, IF(E2<>"NF.NF", E2, ""), IF(G2<>"NF.NF", G2, ""), IF(I2<>"NF.NF", I2, ""), IF(K2<>"NF.NF", K2, ""), IF(M2<>"NF.NF", M2, ""), IF(O2<>"NF.NF", O2, ""), IF(Q2<>"NF.NF", Q2, ""), IF(S2<>"NF.NF", S2, ""), IF(U2<>"NF.NF", U2, ""))
+
+MID(B2, SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) + 1, SEARCH("@", SUBSTITUTE(B2, "]", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "]", "")))) - SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) - 1)
+
+TRIM(CLEAN(SUBSTITUTE(SUBSTITUTE(A1, CHAR(10), ""), CHAR(13), "")))
+
+TRIM(MID(A1, SEARCH(":", A1) + 1, SEARCH(CHAR(10), A1) - SEARCH(":", A1) - 1))
+
+
+
