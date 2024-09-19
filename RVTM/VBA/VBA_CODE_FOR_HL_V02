@@ -3,26 +3,26 @@ Sub HazardLogFormattingSetp1()
     lastRow = Cells(Rows.Count, "A").End(xlUp).Row
     
     Rows(1).Insert
-    Columns("N").Insert
-    ThisWorkbook.Worksheets("QueryResults").Range("N2").Value = "Initial Risk Rating"
+    Columns("O").Insert
+    ThisWorkbook.Worksheets("QueryResults").Range("O2").Value = "Initial Risk Rating"
     Columns("W").Insert
     ThisWorkbook.Worksheets("QueryResults").Range("W2").Value = "Residual Risk Rating"
     
     ThisWorkbook.Worksheets("QueryResults").Range("A1").Value = "TLE"
     Range("A1:B1").Merge
     ThisWorkbook.Worksheets("QueryResults").Range("C1").Value = "[Linked] Hazard"
-    Range("C1:Z1").Merge
-    ThisWorkbook.Worksheets("QueryResults").Range("Y1").Value = "[Linked] Cause"
-    Range("AA1:AC1").Merge
-    ThisWorkbook.Worksheets("QueryResults").Range("AB1").Value = "[Linked] Control"
-    Range("AD1:AJ1").Merge
+    Range("C1:AA1").Merge
+    ThisWorkbook.Worksheets("QueryResults").Range("AB1").Value = "[Linked] Cause"
+    Range("AB1:AD1").Merge
+    ThisWorkbook.Worksheets("QueryResults").Range("AE1").Value = "[Linked] Control"
+    Range("AE1:AN1").Merge
     
     Range("A1:B2").Interior.Color = RGB(252, 213, 180)
-    Range("C1:Z2").Interior.Color = RGB(183, 222, 232)
-    Range("AA1:AC2").Interior.Color = RGB(204, 192, 218)
-    Range("AD1:AJ2").Interior.Color = RGB(216, 228, 188)
+    Range("C1:AA2").Interior.Color = RGB(183, 222, 232)
+    Range("AB1:AD2").Interior.Color = RGB(204, 192, 218)
+    Range("AE1:AN2").Interior.Color = RGB(216, 228, 188)
     
-    With ThisWorkbook.Worksheets("QueryResults").Range("A1:AJ2")
+    With ThisWorkbook.Worksheets("QueryResults").Range("A1:AN2")
         .Font.Size = 11
         .Font.Bold = True
     End With
@@ -63,6 +63,10 @@ Sub HazardLogFormattingSetp1()
     Columns("AH").ColumnWidth = 23
     Columns("AI").ColumnWidth = 23
     Columns("AJ").ColumnWidth = 23
+    Columns("AK").ColumnWidth = 23
+    Columns("AL").ColumnWidth = 23
+    Columns("AM").ColumnWidth = 23
+    Columns("AN").ColumnWidth = 23
     
 End Sub
 
@@ -85,9 +89,9 @@ Sub HazardLogFormattingSetp2()
     Set rngA = ws.Range("A3:A" & lastRow)
     Set rngB = ws.Range("B3:B" & lastRow)
     Set rngC = ws.Range("C3:C" & lastRow)
-    Set rngD = ws.Range("D3:Z" & lastRow)
-    Set rngY = ws.Range("AA3:AC" & lastRow)
-    Set rngAB = ws.Range("AD3:AJ" & lastRow)
+    Set rngD = ws.Range("D3:AA" & lastRow)
+    Set rngY = ws.Range("AB3:AD" & lastRow)
+    Set rngAB = ws.Range("AE3:AN" & lastRow)
     
     ' Clear any existing conditional formatting in the range
     rngA.FormatConditions.Delete
@@ -145,12 +149,12 @@ Sub HazardLogFormattingSetp2()
     rngY.FormatConditions.Delete
     
     ' Add a new conditional formatting rule
-    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3=$AA2")
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AB3=$AB2")
         .Font.Color = RGB(255, 255, 255) ' Set the font color to white
     End With
     
     ' Add a new conditional formatting rule
-    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AA3<>$AA2")
+    With rngY.FormatConditions.Add(Type:=xlExpression, Formula1:="=$AB3<>$AB2")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to Black
     End With
     
@@ -158,69 +162,28 @@ Sub HazardLogFormattingSetp2()
     rngAB.FormatConditions.Delete
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3=$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3<>$AE2,$AB3=$AB2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3<>$AD2,$AA3<>$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3<>$AE2,$AB3<>$AB2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3=$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3=$AE2,$AB3=$AB2)")
         .Font.Color = RGB(255, 255, 255) ' Set the font color to white
     End With
     
     ' Add a new conditional formatting rule
-    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AD3=$AD2,$AA3<>$AA2)")
+    With rngAB.FormatConditions.Add(Type:=xlExpression, Formula1:="=AND($AE3=$AE2,$AB3<>$AB2)")
         .Font.Color = RGB(0, 0, 0) ' Set the font color to black
     End With
     
     
 End Sub
 
-Sub EfficientCompareFormattingMultipleColumns()
 
-  Dim LastRowAL As Long
-  Dim i As Long, BatchStartRow As Long, BatchEndRow As Long
-
-  With ThisWorkbook.Worksheets("QueryResults") ' Replace with your actual sheet name
-
-    ' Disable screen updating for performance boost
-    Application.ScreenUpdating = False
-
-    ' Find last row with data in AL, excluding headers (if any)
-    LastRowAL = .Cells(.Rows.Count, "AL").End(xlUp).Row
-    If Not IsEmpty(.Cells(1, "AL")) Then ' Check for header in AL
-      LastRowAL = .Range("AL1").Find("*", SearchOrder:=xlByRows, SearchDirection:=xlPrevious).Row - 1
-    End If
-
-    ' Loop through rows in batches (adjust batch size as needed)
-    BatchStartRow = 3
-    For i = 3 To LastRowAL Step 100 ' Adjust batch size based on system resources
-      BatchEndRow = IIf(i + 99 > LastRowAL, LastRowAL, i + 99)
-
-      ' Copy formatting from AJ to AL in a batch
-      .Range("AJ" & BatchStartRow & ":" & "AJ" & BatchEndRow).Copy
-      .Range("AL" & BatchStartRow & ":" & "AL" & BatchEndRow).PasteSpecial Paste:=xlPasteFormats
-      Application.CutCopyMode = False
-
-      BatchStartRow = BatchEndRow + 1
-    Next i
-
-    ' Handle any remaining rows (if batch size doesn't perfectly divide data)
-    If BatchStartRow <= LastRowAL Then
-      .Range("AJ" & BatchStartRow & ":" & "AJ" & LastRowAL).Copy
-      .Range("AL" & BatchStartRow & ":" & "AL" & LastRowAL).PasteSpecial Paste:=xlPasteFormats
-      Application.CutCopyMode = False
-    End If
-
-    ' Re-enable screen updating after the loop
-    Application.ScreenUpdating = True
-
-  End With
-
-End Sub
 
 Sub ConcatenateColumnAMBasedOnAD()
     Dim ws As Worksheet

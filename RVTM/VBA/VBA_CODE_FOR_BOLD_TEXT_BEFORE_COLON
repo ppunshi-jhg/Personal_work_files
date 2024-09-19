@@ -1,0 +1,36 @@
+Sub BoldTextBeforeColonInEachLine()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet ' Use the sheet with your "Primary Text" column
+    
+    Dim rng As Range
+    Dim cell As Range
+    Dim line As Variant
+    Dim lineParts As Variant
+    Dim startPos As Integer
+    Dim lineLength As Integer
+    
+    ' Define the range to be the used cells in the "Primary Text" column
+    ' Change "A" to the actual column letter of your "Primary Text" column
+    Set rng = ws.Range("H2", ws.Cells(ws.Rows.Count, "H").End(xlUp))
+    
+    ' Loop through each cell in the range
+    For Each cell In rng
+        If InStr(cell.Value, ":") > 0 Then
+            lineParts = Split(cell.Value, Chr(10)) ' Split cell content by line breaks
+            
+            ' Reset starting position for each cell
+            startPos = 1
+            
+            ' Process each line within the cell
+            For Each line In lineParts
+                lineLength = InStr(line, ":")
+                If lineLength > 0 Then
+                    ' Apply bold formatting to text before the colon in the line
+                    cell.Characters(Start:=startPos, Length:=lineLength - 1).Font.Bold = True
+                End If
+                ' Update starting position for next line by adding the length of the current line and the line break
+                startPos = startPos + Len(line) + 1
+            Next line
+        End If
+    Next cell
+End Sub
