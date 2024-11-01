@@ -1,0 +1,41 @@
+Sub PasteintoFilteredColumn()
+
+    Dim visibleSourceCells As Range
+    Dim destinationCells As Range
+    Dim initialDestinationLastRow As Long
+    Dim sourceCell As Range
+    Dim destCell As Range
+
+    Set visibleSourceCells = Application.Selection.SpecialCells(xlCellTypeVisible)
+
+    
+    Set destinationCells = Application.InputBox("Please select the destination cells:", Type:=8)
+    
+    Application.ScreenUpdating = False
+    
+    
+    initialDestinationLastRow = destinationCells.Rows(destinationCells.Rows.Count).Row
+
+    
+    For Each sourceCell In visibleSourceCells.Cells
+        
+        For Each destCell In destinationCells.Cells
+            If destCell.EntireRow.Hidden = False Then
+               
+                sourceCell.Copy
+                destCell.PasteSpecial Paste:=xlPasteValues
+                
+                If destCell.Row < initialDestinationLastRow Then
+                    Set destinationCells = destCell.Offset(1, 0).Resize(initialDestinationLastRow - destCell.Row)
+                End If
+                
+                Exit For
+            End If
+
+        Next destCell
+    Next sourceCell
+
+    Application.CutCopyMode = False
+    Application.ScreenUpdating = True
+    
+End Sub
