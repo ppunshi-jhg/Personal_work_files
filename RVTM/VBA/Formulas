@@ -1,14 +1,29 @@
-MID(B2, SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) + 1, SEARCH("@", SUBSTITUTE(B2, "]", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "]", "")))) - SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) - 1)
+* MID(B2, SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) + 1, SEARCH("@", SUBSTITUTE(B2, "]", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "]", "")))) - SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) - 1)
 
-TEXTJOIN(".",TRUE,XLOOKUP(E2,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$C:$C,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$F:$F,"NF",0),XLOOKUP(E2,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$C:$C,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$A:$A,"NF",0))
+* TEXTJOIN(".",TRUE,XLOOKUP(E2,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$C:$C,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$F:$F,"NF",0),XLOOKUP(E2,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$C:$C,'[SMW_LW-RATM-2024_09_11.xlsm]RATM(Tender)'!$A:$A,"NF",0))
 
-TEXTJOIN(",", TRUE, IF(E2<>"NF.NF", E2, ""), IF(G2<>"NF.NF", G2, ""), IF(I2<>"NF.NF", I2, ""), IF(K2<>"NF.NF", K2, ""), IF(M2<>"NF.NF", M2, ""), IF(O2<>"NF.NF", O2, ""), IF(Q2<>"NF.NF", Q2, ""), IF(S2<>"NF.NF", S2, ""), IF(U2<>"NF.NF", U2, ""))
+* TEXTJOIN(",", TRUE, IF(E2<>"NF.NF", E2, ""), IF(G2<>"NF.NF", G2, ""), IF(I2<>"NF.NF", I2, ""), IF(K2<>"NF.NF", K2, ""), IF(M2<>"NF.NF", M2, ""), IF(O2<>"NF.NF", O2, ""), IF(Q2<>"NF.NF", Q2, ""), IF(S2<>"NF.NF", S2, ""), IF(U2<>"NF.NF", U2, ""))
 
-MID(B2, SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) + 1, SEARCH("@", SUBSTITUTE(B2, "]", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "]", "")))) - SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) - 1)
+* MID(B2, SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) + 1, SEARCH("@", SUBSTITUTE(B2, "]", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "]", "")))) - SEARCH("@", SUBSTITUTE(B2, "[", "@", LEN(B2)-LEN(SUBSTITUTE(B2, "[", "")))) - 1)
 
-TRIM(CLEAN(SUBSTITUTE(SUBSTITUTE(A1, CHAR(10), ""), CHAR(13), "")))
+* TRIM(CLEAN(SUBSTITUTE(SUBSTITUTE(A1, CHAR(10), ""), CHAR(13), "")))
 
-TRIM(MID(A1, SEARCH(":", A1) + 1, SEARCH(CHAR(10), A1) - SEARCH(":", A1) - 1))
+* TRIM(MID(A1, SEARCH(":", A1) + 1, SEARCH(CHAR(10), A1) - SEARCH(":", A1) - 1))
+
+* =IF(ISNUMBER(FIND("|",H2)),SUBSTITUTE(H2,"|","@",LEN(H2)-LEN(SUBSTITUTE(H2,"|",""))),"Not found")
+
+
+* =MID(A1, SEARCH("@", SUBSTITUTE(A1, "|", "@", LEN(A1) - LEN(SUBSTITUTE(A1, "|", "")))) + 1, LEN(A1) - SEARCH("@", SUBSTITUTE(A1, "|", "@", LEN(A1) - LEN(SUBSTITUTE(A1, "|", "")))) )
+
+* =TEXTSPLIT(A2,{" ","Mr.","Mrs. "},,TRUE) 
+
+* =INDEX(C10:K29,MATCH(C3,B10:B29,0),MATCH(C4&C5,C8:K8&C9:K9))
+
+* =TEXTJOIN(CHAR(10), TRUE, UNIQUE(FILTERXML("<t><s>" & SUBSTITUTE(A1, CHAR(10), "</s><s>") & "</s></t>", "//s"))) (if this needs to be used with a formula of textsplit =TEXTJOIN(",",TRUE,UNIQUE(TEXTSPLIT(A4,","),TRUE))) and if you want to use with the formatting use this: =TEXTJOIN(",", TRUE, UNIQUE(TEXTSPLIT(TRIM(CLEAN(SUBSTITUTE(A4, CHAR(160), " "))), ","), TRUE))
+
+* =IF(G2<>"",G2,"")&IF(I2<>"",","&I2,"")&IF(K2<>"",","&K2,"")&IF(M2<>"",","&M2,"")&IF(O2<>"",","&O2,"")&IF(Q2<>"",","&Q2,"")&IF(S2<>"",","&S2,"")&IF(U2<>"",","&U2,"")&IF(W2<>"",","&W2,"")&IF(Y2<>"",","&Y2,"")&IF(AA2<>"",","&AA2,"")
+
+
 
 
 

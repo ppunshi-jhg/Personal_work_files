@@ -1,0 +1,31 @@
+Function IsStrikethrough(rng As Range) As Boolean
+    Dim cell As Range
+    For Each cell In rng
+        If cell.Value <> "" And cell.Font.Strikethrough = True Then
+            IsStrikethrough = True
+            Exit Function
+        End If
+    Next cell
+    IsStrikethrough = False
+End Function
+
+Function AllStrikethrough(rng As Range) As Boolean
+    Dim cell As Range
+    Dim nonEmptyCellsStrikethrough As Boolean
+    nonEmptyCellsStrikethrough = False
+    
+    For Each cell In rng
+        If cell.Value <> "" Then ' Check only non-empty cells.
+            If cell.Font.Strikethrough = False Then
+                AllStrikethrough = False
+                Exit Function
+            Else
+                nonEmptyCellsStrikethrough = True
+            End If
+        End If
+    Next cell
+    
+    AllStrikethrough = nonEmptyCellsStrikethrough
+End Function
+
+=IF(AllStrikethrough(A2:I2), "Cancelled", IF(IsStrikethrough(A2:I2), "Pending", "Proposed"))

@@ -1,0 +1,16 @@
+Function RemoveHTMLTags(ByVal inputString As String) As String
+    Dim regEx As Object
+    Set regEx = CreateObject("VBScript.RegExp")
+    
+    With regEx
+        .Global = True
+        .IgnoreCase = True
+        .MultiLine = True
+        .Pattern = "<[^>]+>" ' Regular expression for HTML tags
+    End With
+    
+    ' Replace HTML tags with empty string
+    RemoveHTMLTags = regEx.Replace(inputString, "")
+    
+    Set regEx = Nothing
+End Function
