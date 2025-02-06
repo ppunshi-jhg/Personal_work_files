@@ -14,3 +14,5 @@ Function RemoveHTMLTags(ByVal inputString As String) As String
     
     Set regEx = Nothing
 End Function
+
+'Another comments
