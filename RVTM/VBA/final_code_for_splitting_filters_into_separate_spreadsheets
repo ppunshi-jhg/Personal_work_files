@@ -1,0 +1,121 @@
+Option Explicit
+
+'—————————————————————————————————————————
+' helper: strip illegal characters & truncate to 31 chars
+Private Function CleanSheetName(sheetName As String) As String
+    Dim invalidChars As Variant, ch As Variant
+    invalidChars = Array(":", "\", "/", "?", "*", "[", "]")
+    sheetName = Left(sheetName, 31)
+    For Each ch In invalidChars
+        sheetName = Replace(sheetName, ch, "")
+    Next
+    CleanSheetName = Trim(sheetName)
+End Function
+
+'—————————————————————————————————————————
+' helper: was this name already used?
+Private Function SheetNameExists(usedNames As Object, sheetName As String) As Boolean
+    SheetNameExists = usedNames.Exists(sheetName)
+End Function
+
+'—————————————————————————————————————————
+Public Sub CreateSheetsByFilteredColumn()
+    Dim wsMaster    As Worksheet
+    Dim selectedCol As Range
+    Dim colNum      As Long
+    Dim lastRow     As Long
+    Dim dict        As Object
+    Dim i As Long, p As Long
+    
+    '— 1) pick your column —
+    On Error Resume Next
+    Set selectedCol = Application.InputBox( _
+      Prompt:="Select the cells in the column with line-break-separated values:", _
+      Type:=8)
+    On Error GoTo 0
+    If selectedCol Is Nothing Then Exit Sub
+    
+    Set wsMaster = selectedCol.Worksheet
+    colNum = selectedCol.Column
+    lastRow = wsMaster.Cells(wsMaster.Rows.Count, colNum).End(xlUp).Row
+    
+    '— 2) build dictionary: key = each unique item, value = Collection of row-numbers —
+    Set dict = CreateObject("Scripting.Dictionary")
+    dict.CompareMode = vbTextCompare
+    
+    For i = 2 To lastRow
+        Dim raw As String
+        raw = wsMaster.Cells(i, colNum).Value
+        If Len(Trim(raw)) > 0 Then
+            ' normalize any CR/LF to a single LF
+            raw = Replace(raw, vbCrLf, vbLf)
+            raw = Replace(raw, vbCr, vbLf)
+            
+            Dim parts As Variant
+            parts = Split(raw, vbLf)
+            
+            For p = LBound(parts) To UBound(parts)
+                Dim keyVal As String
+                keyVal = Trim(parts(p))
+                If Len(keyVal) > 0 Then
+                    If Not dict.Exists(keyVal) Then
+                        dict.Add keyVal, New Collection
+                    End If
+                    dict(keyVal).Add i
+                End If
+            Next
+        End If
+    Next
+    
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    
+    '— 3) for each unique key, make a sheet & copy rows —
+    Dim usedNames As Object
+    Set usedNames = CreateObject("Scripting.Dictionary")
+    usedNames.CompareMode = vbTextCompare
+    
+    Dim dictKey As Variant
+    For Each dictKey In dict.Keys
+        ' clean and ensure unique sheet name
+        Dim sName As String
+        sName = CleanSheetName(CStr(dictKey))
+        Dim suffix As Long: suffix = 1
+        Do While SheetNameExists(usedNames, sName)
+            sName = Left(CleanSheetName(CStr(dictKey)), 28) & "_" & suffix
+            suffix = suffix + 1
+        Loop
+        usedNames.Add sName, True
+        
+        ' add sheet
+        Dim wsNew As Worksheet
+        Set wsNew = ThisWorkbook.Worksheets.Add( _
+                      After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+        wsNew.Name = sName
+        
+        ' copy header
+        wsMaster.Rows(1).Copy wsNew.Rows(1)
+        
+        ' copy each matching row, but overwrite column K with just the single filter value
+        Dim destRow As Long: destRow = 2
+        Dim rowNum  As Variant
+        For Each rowNum In dict(dictKey)
+            wsMaster.Rows(rowNum).Copy wsNew.Rows(destRow)
+            wsNew.Cells(destRow, colNum).Value = dictKey
+            destRow = destRow + 1
+        Next
+    Next
+    
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+    
+    MsgBox "Created " & dict.Count & " sheets from column " & ColLetter(colNum) & ".", vbInformation
+End Sub
+
+'—————————————————————————————————————————
+' small helper to get column letter from number (just for your MsgBox)
+Private Function ColLetter(colNum As Long) As String
+    ColLetter = Split(Cells(1, colNum).Address(True, False), "$")(0)
+End Function
+
+
