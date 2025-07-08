@@ -1,0 +1,66 @@
+Option Explicit
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Const DELIM As String = ", "
+    Dim newVal As String
+    Dim oldVal As String
+    Dim parts As Variant
+    Dim i As Long
+    Dim toggled As Boolean
+
+    ' Only single-cell changes in T:U
+    If Target.CountLarge > 1 Then Exit Sub
+    If Intersect(Target, Me.Range("T:U")) Is Nothing Then Exit Sub
+
+    On Error GoTo CleanUp
+    Application.EnableEvents = False
+
+    ' 1) grab what they just picked
+    newVal = Target.Value
+
+    ' 2) undo the change so the cell goes back to its old text
+    Application.Undo
+    oldVal = Target.Value
+
+    ' 3) split the old text into an array (or blank array if it was empty)
+    If Len(oldVal) > 0 Then
+        parts = Split(oldVal, DELIM)
+    Else
+        parts = Array()
+    End If
+
+    ' 4) see if newVal is already in there → toggle it out if so
+    toggled = False
+    For i = LBound(parts) To UBound(parts)
+        If parts(i) = newVal Then
+            parts(i) = ""         ' remove it
+            toggled = True
+            Exit For
+        End If
+    Next i
+
+    If toggled Then
+        ' rebuild without the blanks
+        Dim rebuilt As String
+        For i = LBound(parts) To UBound(parts)
+            If Len(parts(i)) > 0 Then
+                If rebuilt = "" Then
+                    rebuilt = parts(i)
+                Else
+                    rebuilt = rebuilt & DELIM & parts(i)
+                End If
+            End If
+        Next i
+        Target.Value = rebuilt
+    Else
+        ' not found → append it
+        If Len(oldVal) > 0 Then
+            Target.Value = oldVal & DELIM & newVal
+        Else
+            Target.Value = newVal
+        End If
+    End If
+
+CleanUp:
+    Application.EnableEvents = True
+End Sub
