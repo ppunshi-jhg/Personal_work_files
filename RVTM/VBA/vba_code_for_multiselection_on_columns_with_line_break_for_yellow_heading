@@ -1,0 +1,88 @@
+Option Explicit
+
+Private Sub Workbook_SheetChange(ByVal Sh As Object, ByVal Target As Range)
+    Const DELIM As String = vbLf
+    Dim newVal As String
+    Dim oldVal As String
+    Dim parts As Variant
+    Dim i As Long
+    Dim toggled As Boolean
+    Dim rebuilt As String
+    Dim headerCell As Range
+    Dim multiSelectColumns As Range
+
+    ' Only single-cell changes
+    If Target.CountLarge > 1 Then Exit Sub
+
+    ' Identify columns with yellow header in row 1
+    For Each headerCell In Sh.Rows(1).cells
+        If headerCell.Interior.Color = RGB(255, 255, 0) Then
+            If multiSelectColumns Is Nothing Then
+                Set multiSelectColumns = headerCell.EntireColumn
+            Else
+                Set multiSelectColumns = Union(multiSelectColumns, headerCell.EntireColumn)
+            End If
+        End If
+    Next headerCell
+
+    ' Exit if the changed cell is not in one of the identified columns
+    If multiSelectColumns Is Nothing Then Exit Sub
+    If Intersect(Target, multiSelectColumns) Is Nothing Then Exit Sub
+
+    On Error GoTo CleanUp
+    Application.EnableEvents = False
+
+    ' Capture the newly picked value
+    newVal = Target.value
+    If Len(newVal) = 0 Then
+    Target.value = ""
+    Target.WrapText = False
+    GoTo CleanUp
+    End If
+
+    Application.Undo
+    oldVal = Target.value
+
+    ' Split on line-break
+    If Len(oldVal) > 0 Then
+        parts = Split(oldVal, DELIM)
+    Else
+        parts = Array()
+    End If
+
+    ' Toggle value
+    toggled = False
+    For i = LBound(parts) To UBound(parts)
+        If parts(i) = newVal Then
+            parts(i) = ""
+            toggled = True
+            Exit For
+        End If
+    Next i
+
+    If toggled Then
+        rebuilt = ""
+        For i = LBound(parts) To UBound(parts)
+            If Len(parts(i)) > 0 Then
+                If rebuilt = "" Then
+                    rebuilt = parts(i)
+                Else
+                    rebuilt = rebuilt & DELIM & parts(i)
+                End If
+            End If
+        Next i
+    Else
+        If Len(oldVal) > 0 Then
+            rebuilt = oldVal & DELIM & newVal
+        Else
+            rebuilt = newVal
+        End If
+    End If
+
+    Target.value = rebuilt
+    Target.WrapText = True
+
+CleanUp:
+    Application.EnableEvents = True
+End Sub
+
