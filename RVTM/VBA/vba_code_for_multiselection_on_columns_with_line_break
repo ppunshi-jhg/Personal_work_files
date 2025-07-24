@@ -1,0 +1,73 @@
+' This code allows for multi-selection in columns T and U of a worksheet.But its selecting only two columns - so you need to adjust the range if you want more columns.
+' For example, you can do like this
+' If Intersect(Target, Me.Range("T:T,U:U,W:W,Y:Y")) Is Nothing Then Exit Sub
+
+Option Explicit
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Const DELIM As String = vbLf
+    Dim newVal As String
+    Dim oldVal As String
+    Dim parts As Variant
+    Dim i As Long
+    Dim toggled As Boolean
+    Dim rebuilt As String
+    
+    ' Only single‐cell changes in T:U
+    If Target.CountLarge > 1 Then Exit Sub
+    If Intersect(Target, Me.Range("T:U")) Is Nothing Then Exit Sub
+    
+    On Error GoTo CleanUp
+    Application.EnableEvents = False
+
+    ' 1) capture the newly picked value
+    newVal = Target.Value
+    ' 2) undo to restore the prior cell text
+    Application.Undo
+    oldVal = Target.Value
+    
+    ' 3) split on line‐break (or get an empty array)
+    If Len(oldVal) > 0 Then
+        parts = Split(oldVal, DELIM)
+    Else
+        parts = Array()
+    End If
+
+    ' 4) check if newVal is already in the array → toggle it out
+    toggled = False
+    For i = LBound(parts) To UBound(parts)
+        If parts(i) = newVal Then
+            parts(i) = ""    ' remove it
+            toggled = True
+            Exit For
+        End If
+    Next i
+
+    If toggled Then
+        ' rebuild, skipping blanks
+        rebuilt = ""
+        For i = LBound(parts) To UBound(parts)
+            If Len(parts(i)) > 0 Then
+                If rebuilt = "" Then
+                    rebuilt = parts(i)
+                Else
+                    rebuilt = rebuilt & DELIM & parts(i)
+                End If
+            End If
+        Next i
+    Else
+        ' not found → append with a line break (if needed)
+        If Len(oldVal) > 0 Then
+            rebuilt = oldVal & DELIM & newVal
+        Else
+            rebuilt = newVal
+        End If
+    End If
+    
+    ' 5) stick it back in, and turn on WrapText
+    Target.Value = rebuilt
+    Target.WrapText = True
+
+CleanUp:
+    Application.EnableEvents = True
+End Sub

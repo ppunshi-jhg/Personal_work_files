@@ -1,0 +1,137 @@
+Option Explicit
+ 
+'—————————————————————————————————————————
+' helper: strip illegal characters & truncate to 31 chars
+Private Function CleanSheetName(sheetName As String) As String
+   Dim invalidChars As Variant, ch As Variant
+   invalidChars = Array(":", "\", "/", "?", "*", "[", "]")
+   sheetName = Left(sheetName, 31)
+   For Each ch In invalidChars
+       sheetName = Replace(sheetName, ch, "")
+   Next
+   CleanSheetName = WorksheetFunction.Trim(sheetName)
+End Function
+ 
+'—————————————————————————————————————————
+' helper: was this name already used?
+Private Function SheetNameExists(usedNames As Object, sheetName As String) As Boolean
+   SheetNameExists = usedNames.Exists(sheetName)
+End Function
+ 
+'—————————————————————————————————————————
+' helper to get column letter from number
+Private Function ColLetter(colNum As Long) As String
+   ColLetter = Split(Cells(1, colNum).Address(True, False), "$")(0)
+End Function
+ 
+'—————————————————————————————————————————
+' Fast, in-memory split by line-breaks (single or multi-value cells)
+Public Sub CreateSheetsByFilteredColumn_Fast()
+   Dim ws           As Worksheet
+   Dim selectedCell As Range
+   Dim colNum       As Long
+   Dim lastRow      As Long, lastCol As Long
+   Dim dataArr      As Variant
+   Dim dict         As Object
+   Dim i As Long, p As Long
+   Dim raw          As String, parts As Variant
+   Dim key          As Variant
+   Dim rowNums      As Collection
+   Dim usedNames    As Object
+   Dim outArr       As Variant
+   Dim rCount       As Long, cCount As Long
+   Dim j As Long, k As Long
+   Dim newWs        As Worksheet
+  
+   ' — 1) pick your column —
+   On Error Resume Next
+   Set selectedCell = Application.InputBox( _
+       Prompt:="Select any cell in the column you want to split (header must be row 1):", _
+       Type:=8)
+   On Error GoTo 0
+   If selectedCell Is Nothing Then Exit Sub
+  
+   Set ws    = selectedCell.Worksheet
+   colNum    = selectedCell.Column
+   lastRow   = ws.Cells(ws.Rows.Count, colNum).End(xlUp).Row
+   lastCol   = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+  
+   ' — 2) load everything into a Variant array —
+   dataArr = ws.Range(ws.Cells(1, 1), ws.Cells(lastRow, lastCol)).Value
+  
+   ' — 3) build dictionary: key = each unique item, value = Collection of row-numbers —
+   Set dict = CreateObject("Scripting.Dictionary")
+   dict.CompareMode = vbTextCompare
+  
+   For i = 2 To lastRow
+       raw = CStr(dataArr(i, colNum))
+       If Len(Trim(raw)) > 0 Then
+           raw = Replace(raw, vbCrLf, vbLf)
+           raw = Replace(raw, vbCr, vbLf)
+           parts = Split(raw, vbLf)
+           For p = LBound(parts) To UBound(parts)
+               key = Trim(parts(p))
+               If Len(key) > 0 Then
+                   If Not dict.Exists(key) Then
+                       Set rowNums = New Collection
+                       dict.Add key, rowNums
+                   End If
+                   dict(key).Add i
+               End If
+           Next p
+       End If
+   Next i
+  
+   Application.ScreenUpdating = False
+   Application.DisplayAlerts  = False
+  
+   Set usedNames = CreateObject("Scripting.Dictionary")
+   usedNames.CompareMode = vbTextCompare
+  
+   ' — 4) for each unique key, build a 2D array and dump it to a new sheet —
+   For Each key In dict.Keys
+       rCount = dict(key).Count        ' how many rows for this key
+       cCount = lastCol
+      
+       ' prepare array: +1 for header row
+       ReDim outArr(1 To rCount + 1, 1 To cCount)
+      
+       ' copy header from dataArr row 1
+       For k = 1 To cCount
+           outArr(1, k) = dataArr(1, k)
+       Next k
+      
+       ' fill data rows
+       For j = 1 To rCount
+           For k = 1 To cCount
+               outArr(j + 1, k) = dataArr(dict(key)(j), k)
+           Next k
+           ' overwrite the split-column with the single key
+           outArr(j + 1, colNum) = key
+       Next j
+      
+       ' create & name sheet
+       Dim sName As String: sName = CleanSheetName(CStr(key))
+       Dim suffix As Long: suffix = 1
+       Do While SheetNameExists(usedNames, sName)
+           sName = Left(CleanSheetName(CStr(key)), 28) & "_" & suffix
+           suffix = suffix + 1
+       Loop
+       usedNames.Add sName, True
+      
+       Set newWs = ThisWorkbook.Worksheets.Add( _
+                      After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+       On Error Resume Next
+       newWs.Name = sName
+       On Error GoTo 0
+      
+       ' write the entire block in one shot
+       newWs.Range(newWs.Cells(1, 1), newWs.Cells(rCount + 1, cCount)).Value = outArr
+   Next key
+  
+   Application.DisplayAlerts  = True
+   Application.ScreenUpdating = True
+  
+   MsgBox "Created " & dict.Count & " sheets from column " & ColLetter(colNum) & ".", _
+          vbInformation
+End Sub
