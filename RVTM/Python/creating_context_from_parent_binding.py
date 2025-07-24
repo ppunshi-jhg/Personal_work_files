@@ -28,3 +28,19 @@ df["Result"] = df["section"].apply(get_hierarchy_text)
 
 
 df.to_excel("output_with_results_2.xlsx", index=False)
+
+
+# Excel formula to do the same thing is:
+# "=LET(
+#   code,       [@section],
+#   tblSec,     [section],
+#   tblTxt,     [Primary Text],
+#   seq,        SEQUENCE(LEN(code)),
+#   sepPos,     FILTER(seq, (MID(code,seq,1)=""."") + (MID(code,seq,1)=""-"")),
+#   parentCodes, LEFT(code, sepPos-1),
+#   parentTexts, IFERROR( XLOOKUP(parentCodes, tblSec, tblTxt, """"), """" ),
+#   thisText,    XLOOKUP(code,     tblSec, tblTxt, """"),
+#   allTexts,    VSTACK(parentTexts, thisText),
+#   TEXTJOIN(CHAR(10), TRUE, allTexts)
+# )"
+
